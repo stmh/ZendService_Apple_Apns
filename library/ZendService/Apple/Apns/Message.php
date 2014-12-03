@@ -315,7 +315,7 @@ class Message
             $message = array_merge($this->custom, $message);
         }
         if (!is_null($this->contentAvailable)) {
-            $aps['content-available'] = $this->contentAvailable;
+            $aps['content-available'] = $this->contentAvailable ? '1' : '0';
         }
         if (!empty($aps)) {
             $message['aps'] = $aps;
