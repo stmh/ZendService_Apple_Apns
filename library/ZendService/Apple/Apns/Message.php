@@ -61,6 +61,12 @@ class Message
     protected $custom;
 
     /**
+     * content-available
+     * @var bool|null
+     */
+    protected $contentAvailable;
+
+    /**
      * Get Identifier
      *
      * @return string
@@ -265,6 +271,28 @@ class Message
     }
 
     /**
+     * Get content-available-flag
+     *
+     * @return bool|null
+     */
+    public function getContentAvailable()
+    {
+        return $this->contentAvailable;
+    }
+
+    /**
+     * Set content-available-flag
+     *
+     */
+    public function setContentAvailable($content_available)
+    {
+        if ($content_available !== null && !$content_available == (bool) $content_available) {
+            throw new Exception\InvalidArgumentException('Badge must be null or a boolean');
+        }
+        $this->contentAvailable = $content_available;
+    }
+
+    /**
      * Get Payload
      * Generate APN array.
      *
@@ -285,6 +313,9 @@ class Message
         }
         if (!empty($this->custom)) {
             $message = array_merge($this->custom, $message);
+        }
+        if (!is_null($this->contentAvailable)) {
+            $aps['content-available'] = $this->contentAvailable;
         }
         if (!empty($aps)) {
             $message['aps'] = $aps;

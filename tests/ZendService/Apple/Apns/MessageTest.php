@@ -122,6 +122,19 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $this->message->getCustom());
     }
 
+    public function testSetContentAvailableReturnsBool()
+    {
+        $content_available = true;
+        $this->message->setContentAvailable($content_available);
+        $this->assertEquals($content_available, $this->message->getContentAvailable());
+    }
+
+    public function testSetContentAvailableThrowsExceptionOnNonBool()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $this->message->setContentAvailable(array());
+    }
+
     public function testAlertConstructor()
     {
         $alert = new Alert(
