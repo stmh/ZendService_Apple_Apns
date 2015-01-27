@@ -55,16 +55,16 @@ class Message
     protected $sound;
 
     /**
+     * Content Available
+     * @var int|null
+     */
+    protected $contentAvailable;
+
+    /**
      * Custom Attributes
      * @var array|null
      */
     protected $custom;
-
-    /**
-     * content-available
-     * @var bool|null
-     */
-    protected $contentAvailable;
 
     /**
      * Get Identifier
@@ -243,6 +243,32 @@ class Message
     }
 
     /**
+     * Get Content Available
+     *
+     * @return int|null
+     */
+    public function getContentAvailable()
+    {
+        return $this->contentAvailable;
+    }
+
+    /**
+     * Set Content Available
+     *
+     * @param  int|null $sound
+     * @return Message
+     */
+    public function setContentAvailable($value)
+    {
+        if ($value !== null && !is_int($value)) {
+            throw new Exception\InvalidArgumentException('Content Available must be null or an integer');
+        }
+        $this->contentAvailable = $value;
+
+        return $this;
+    }
+
+    /**
      * Get Custom Data
      *
      * @return array|null
@@ -271,28 +297,6 @@ class Message
     }
 
     /**
-     * Get content-available-flag
-     *
-     * @return bool|null
-     */
-    public function getContentAvailable()
-    {
-        return $this->contentAvailable;
-    }
-
-    /**
-     * Set content-available-flag
-     *
-     */
-    public function setContentAvailable($content_available)
-    {
-        if ($content_available !== null && !$content_available == (bool) $content_available) {
-            throw new Exception\InvalidArgumentException('Badge must be null or a boolean');
-        }
-        $this->contentAvailable = $content_available;
-    }
-
-    /**
      * Get Payload
      * Generate APN array.
      *
@@ -311,11 +315,11 @@ class Message
         if (!is_null($this->sound)) {
             $aps['sound'] = $this->sound;
         }
-        if (!empty($this->custom)) {
-            $message = array_merge($this->custom, $message);
-        }
         if (!is_null($this->contentAvailable)) {
             $aps['content-available'] = $this->contentAvailable ? '1' : '0';
+        }
+        if (!empty($this->custom)) {
+            $message = array_merge($this->custom, $message);
         }
         if (!empty($aps)) {
             $message['aps'] = $aps;
